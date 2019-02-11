@@ -47,12 +47,13 @@ class HangpersonGame
   end
   
   def guess(str)
-    str = str.downcase
     if str == nil
       raise ArgumentError
-    elsif str == ''
+    end
+    str = str.downcase
+    if str == ''
       raise ArgumentError
-    elsif (str !=~ /[A-Za-z]/) == 0
+    elsif (str =~ /[A-Za-z]/) == nil
       raise ArgumentError
     elsif @word.count(str) == 0
       valid = does_contain?(@wrong_guesses, str)
@@ -83,6 +84,32 @@ class HangpersonGame
       return str
     else
       return str + letter
+    end
+  end
+  
+  def word_with_guesses
+    chars = @word.split('')
+    if (@guesses == nil)
+      return '-' * @word.length
+    end
+    retVal = ''
+    chars.each do |char|
+      if @guesses.count(char) >0
+        retVal += char
+      else
+        retVal += '-'
+      end
+    end
+    return retVal
+  end
+  
+  def check_win_or_lose
+    if @wrong_guesses.length >= 7
+      return :lose
+    elsif word_with_guesses == @word
+      return :win
+    else
+      return :play
     end
   end
 
