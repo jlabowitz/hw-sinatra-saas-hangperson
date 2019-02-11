@@ -29,7 +29,7 @@ class HangpersonGame
   
   
   def initialize(word)
-    @word = word
+    @word = word.downcase
     @guesses = ''
     @wrong_guesses = ''
   end
@@ -47,6 +47,7 @@ class HangpersonGame
   end
   
   def guess(str)
+    str = str.downcase
     if str == nil
       raise ArgumentError
     elsif str == ''
@@ -54,9 +55,23 @@ class HangpersonGame
     elsif (str !=~ /[A-Za-z]/) == 0
       raise ArgumentError
     elsif @word.count(str) == 0
-      wrong_guesses = add_if_does_not_contain(wrong_guesses, str)
+      valid = does_contain?(@wrong_guesses, str)
+      @wrong_guesses = add_if_does_not_contain(@wrong_guesses, str)
+      return !valid
     else
-      guesses = add_if_does_not_contain(guesses, str)
+      valid = does_contain?(@guesses, str)
+      @guesses = add_if_does_not_contain(@guesses, str)
+      return !valid
+    end
+  end
+  
+  def does_contain?(str, letter)
+    if str == nil
+      return false
+    elsif str.count(letter) > 0
+      return true
+    else
+      return false
     end
   end
   
