@@ -8,8 +8,30 @@ class HangpersonGame
   # def initialize()
   # end
   
+  attr_accessor :word
+  
+  def guesses
+    @guesses.to_s
+  end
+  
+  def guesses=(str)
+    @guesses = str
+  end
+    
+  
+  def wrong_guesses
+    @wrong_guesses.to_s
+  end
+  
+  def wrong_guesses=(str)
+    @wrong_guesses = str
+  end
+  
+  
   def initialize(word)
     @word = word
+    @guesses = ''
+    @wrong_guesses = ''
   end
 
   # You can test it by running $ bundle exec irb -I. -r app.rb
@@ -22,6 +44,31 @@ class HangpersonGame
     Net::HTTP.new('watchout4snakes.com').start { |http|
       return http.post(uri, "").body
     }
+  end
+  
+  def guess(str)
+    if str == nil
+      raise ArgumentError
+    elsif str == ''
+      raise ArgumentError
+    elsif (str !=~ /[A-Za-z]/) == 0
+      raise ArgumentError
+    elsif @word.count(str) == 0
+      wrong_guesses = add_if_does_not_contain(wrong_guesses, str)
+    else
+      guesses = add_if_does_not_contain(guesses, str)
+    end
+  end
+  
+  
+  def add_if_does_not_contain(str, letter)
+    if str == nil
+      return letter
+    elsif str.count(letter) > 0
+      return str
+    else
+      return str + letter
+    end
   end
 
 end
